@@ -78,6 +78,15 @@ class WalletConnectQrCodeModal {
     }
   }
 
+  Future<void> openWalletForTx() async {
+    if (Utils.isIOS) {
+      if (_wallet == null) return;
+      await Utils.iosLaunchForTx(wallet: _wallet!);
+    } else {
+      await launchUrl(Uri.parse('wc:'));
+    }
+  }
+
   // PRIVATE
   final WalletConnect _connector;
   Wallet? _wallet;

@@ -39,6 +39,19 @@ class Utils {
     }
   }
 
+  static Future<void> iosLaunchForTx({required Wallet wallet}) async {
+    if (await openableLink(wallet.mobile.universal)) {
+      await launchUrl(
+        Uri.parse('${wallet.mobile.universal!}/wc'),
+        mode: LaunchMode.externalApplication,
+      );
+    } else if (await openableLink(wallet.mobile.native)) {
+      await launchUrl(Uri.parse('${wallet.mobile.native!}/wc'));
+    } else if (await openableLink(wallet.app.ios)) {
+      await launchUrl(Uri.parse(wallet.app.ios!));
+    }
+  }
+
   static Future<void> desktopLaunch({
     required Wallet wallet,
     required String uri,
