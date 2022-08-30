@@ -37,6 +37,10 @@ class _ModalMainPageState extends State<ModalMainPage> {
         width: MediaQuery.of(context).size.width * 0.9,
         height: max(500, MediaQuery.of(context).size.height * 0.5),
         child: Card(
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: DefaultTabController(
