@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 import 'components/modal_main_page.dart';
@@ -68,13 +67,11 @@ class WalletConnectQrCodeModal {
   /// For Android will open system dialog
   Future<void> openWalletApp() async {
     if (_uri == null) return;
-
     if (Utils.isIOS) {
       if (_wallet == null) return;
-
       await Utils.iosLaunch(wallet: _wallet!, uri: _uri!);
     } else {
-      await launchUrl(Uri.parse(_uri!));
+      await Utils.androidLaunch(wallet: _wallet!, uri: _uri!);
     }
   }
 
@@ -83,7 +80,7 @@ class WalletConnectQrCodeModal {
       if (_wallet == null) return;
       await Utils.iosLaunchForTx(wallet: _wallet!);
     } else {
-      await launchUrl(Uri.parse('wc:'));
+      await Utils.androidLaunchForTx(wallet: _wallet!);
     }
   }
 

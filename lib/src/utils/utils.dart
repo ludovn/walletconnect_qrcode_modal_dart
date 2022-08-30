@@ -21,6 +21,23 @@ class Utils {
   }) =>
       Uri.parse('$appLink/wc?uri=${Uri.encodeComponent(wcUri)}');
 
+  static Future<void> androidLaunch({
+    required Wallet wallet,
+    required String uri,
+  }) async {
+    if (await openableLink(wallet.mobile.universal)) {
+      await launchUrl(
+          convertToWcLink(appLink: wallet.mobile.universal!, wcUri: uri),
+          mode: LaunchMode.externalApplication);
+    } else if (await openableLink(wallet.mobile.native)) {
+      await launchUrl(
+        convertToWcLink(appLink: wallet.mobile.native!, wcUri: uri),
+      );
+    } else if (await openableLink(wallet.app.android)) {
+      await launchUrl(Uri.parse(wallet.app.android!));
+    }
+  }
+
   static Future<void> iosLaunch({
     required Wallet wallet,
     required String uri,
@@ -49,6 +66,14 @@ class Utils {
       await launchUrl(Uri.parse('${wallet.mobile.native!}/wc'));
     } else if (await openableLink(wallet.app.ios)) {
       await launchUrl(Uri.parse(wallet.app.ios!));
+    }
+  }
+
+  static Future<void> androidLaunchForTx({required Wallet wallet}) async {
+    if (await openableLink(wallet.mobile.universal)) {
+      await launchUrl(
+        Uri.parse('${wallet.mobile.universal!}/wc')
+      );
     }
   }
 
