@@ -9,12 +9,9 @@ import 'models/wallet.dart';
 import 'utils/utils.dart';
 
 class WalletConnectQrCodeModal {
-  factory WalletConnectQrCodeModal({
-    WalletConnect? connector,
-  }) {
-    connector = connector ?? WalletConnect();
-
-    return WalletConnectQrCodeModal._internal(connector: connector);
+  WalletConnectQrCodeModal({WalletConnect? connector, Wallet? wallet}) {
+    _connector = connector ?? WalletConnect();
+    _wallet = wallet;
   }
 
   WalletConnect get connector => _connector;
@@ -66,9 +63,8 @@ class WalletConnectQrCodeModal {
   /// For iOS will try to open previously selected Wallet
   /// For Android will open system dialog
   Future<void> openWalletApp() async {
-    if (_uri == null) return;
+    if (_uri == null || _wallet == null) return;
     if (Utils.isIOS) {
-      if (_wallet == null) return;
       await Utils.iosLaunch(wallet: _wallet!, uri: _uri!);
     } else {
       await Utils.androidLaunch(wallet: _wallet!, uri: _uri!);
@@ -76,8 +72,8 @@ class WalletConnectQrCodeModal {
   }
 
   Future<void> openWalletForTx() async {
+    if (_wallet == null) return;
     if (Utils.isIOS) {
-      if (_wallet == null) return;
       await Utils.iosLaunchForTx(wallet: _wallet!);
     } else {
       await Utils.androidLaunchForTx(wallet: _wallet!);
@@ -85,13 +81,11 @@ class WalletConnectQrCodeModal {
   }
 
   // PRIVATE
-  final WalletConnect _connector;
+  late final WalletConnect _connector;
   Wallet? _wallet;
   String? _uri;
 
-  WalletConnectQrCodeModal._internal({
-    required WalletConnect connector,
-  }) : _connector = connector;
+  Wallet? get wallet => _wallet;
 
   Future<SessionStatus?> _createSessionWithModal(
     BuildContext context, {

@@ -71,9 +71,8 @@ class Utils {
 
   static Future<void> androidLaunchForTx({required Wallet wallet}) async {
     if (await openableLink(wallet.mobile.universal)) {
-      await launchUrl(
-        Uri.parse('${wallet.mobile.universal!}/wc')
-      );
+      await launchUrl(Uri.parse('${wallet.mobile.universal!}/wc'),
+          mode: LaunchMode.externalApplication);
     }
   }
 
